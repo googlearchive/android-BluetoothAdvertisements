@@ -29,8 +29,8 @@ sample in action.
 Pre-requisites
 --------------
 
-- Android SDK v22
-- Android Build Tools v22.0.1
+- Android SDK v23
+- Android Build Tools v23.0.0
 - Android Support Repository
 
 Screenshots
