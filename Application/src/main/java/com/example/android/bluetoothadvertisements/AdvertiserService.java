@@ -1,5 +1,7 @@
 package com.example.android.bluetoothadvertisements;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -25,6 +27,8 @@ public class AdvertiserService extends Service {
 
     private static final String TAG = AdvertiserService.class.getSimpleName();
 
+    private static final int FOREGROUND_NOTIFICATION_ID = 1;
+
     /**
      * A global variable to let AdvertiserFragment check if the Service is running without needing
      * to start or bind to it.
@@ -34,7 +38,7 @@ public class AdvertiserService extends Service {
     public static boolean running = false;
 
     public static final String ADVERTISING_FAILED =
-            "com.example.android.bluetoothadvertisements.advertising_failed";
+        "com.example.android.bluetoothadvertisements.advertising_failed";
 
     public static final String ADVERTISING_FAILED_EXTRA_CODE = "failureCode";
 
@@ -72,6 +76,7 @@ public class AdvertiserService extends Service {
         running = false;
         stopAdvertising();
         mHandler.removeCallbacks(timeoutRunnable);
+        stopForeground(true);
         super.onDestroy();
     }
 
@@ -125,6 +130,8 @@ public class AdvertiserService extends Service {
      * Starts BLE Advertising.
      */
     private void startAdvertising() {
+        goForeground();
+
         Log.d(TAG, "Service: Starting Advertising");
 
         if (mAdvertiseCallback == null) {
@@ -134,9 +141,27 @@ public class AdvertiserService extends Service {
 
             if (mBluetoothLeAdvertiser != null) {
                 mBluetoothLeAdvertiser.startAdvertising(settings, data,
-                        mAdvertiseCallback);
+                    mAdvertiseCallback);
             }
         }
+    }
+
+    /**
+     * Move service to the foreground, to avoid execution limits on background processes.
+     *
+     * Callers should call stopForeground(true) when background work is complete.
+     */
+    private void goForeground() {
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+            notificationIntent, 0);
+        Notification n = new Notification.Builder(this)
+            .setContentTitle("Advertising device via Bluetooth")
+            .setContentText("This device is discoverable to others nearby.")
+            .setSmallIcon(R.drawable.ic_launcher)
+            .setContentIntent(pendingIntent)
+            .build();
+        startForeground(FOREGROUND_NOTIFICATION_ID, n);
     }
 
     /**
