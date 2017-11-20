@@ -155,7 +155,7 @@ public class ScannerFragment extends ListFragment {
                     + getString(R.string.seconds);
             Toast.makeText(getActivity(), toastText, Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getActivity(), R.string.already_scanning, Toast.LENGTH_SHORT);
+            Toast.makeText(getActivity(), R.string.already_scanning, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -181,7 +181,7 @@ public class ScannerFragment extends ListFragment {
 
         ScanFilter.Builder builder = new ScanFilter.Builder();
         // Comment out the below line to see all BLE devices around you
-        builder.setServiceUuid(Constants.Service_UUID);
+        //builder.setServiceUuid(Constants.Service_UUID);
         scanFilters.add(builder.build());
 
         return scanFilters;
@@ -204,7 +204,7 @@ public class ScannerFragment extends ListFragment {
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
             super.onBatchScanResults(results);
-
+            Log.d(TAG, "SampleScanCallback onBatchScanResults");
             for (ScanResult result : results) {
                 mAdapter.add(result);
             }

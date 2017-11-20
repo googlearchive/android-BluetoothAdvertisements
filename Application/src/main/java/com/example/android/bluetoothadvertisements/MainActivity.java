@@ -16,13 +16,17 @@
 
 package com.example.android.bluetoothadvertisements;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +35,8 @@ import android.widget.Toast;
  */
 public class MainActivity extends FragmentActivity {
 
+    private static final int ACCESS_FINE_LOCATION_PERMISSION = 85;
+
     private BluetoothAdapter mBluetoothAdapter;
 
     @Override
@@ -38,6 +44,11 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle(R.string.activity_main_title);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_PERMISSION);
+
+        }
 
         if (savedInstanceState == null) {
 
