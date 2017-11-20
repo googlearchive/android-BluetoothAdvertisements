@@ -204,7 +204,6 @@ public class ScannerFragment extends ListFragment {
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
             super.onBatchScanResults(results);
-            Log.d(TAG, "SampleScanCallback onBatchScanResults");
             for (ScanResult result : results) {
                 mAdapter.add(result);
             }
