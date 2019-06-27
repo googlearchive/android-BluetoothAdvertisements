@@ -162,10 +162,11 @@ public class AdvertiserService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
             notificationIntent, 0);
 
+        String channel;
         Notification n;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channel = createChannel();
+            channel = createChannel();
             n = new Notification.Builder(this, channel).setContentTitle(
                 "Advertising device via Bluetooth")
                 .setContentText("This device is discoverable to others nearby.")
@@ -199,7 +200,7 @@ public class AdvertiserService extends Service {
     private synchronized String createChannel() {
         NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        String id = "bluetooth";
+        String id = "bluetooth channel";
         String name = "bluetooth advertisements";
         int importance = NotificationManager.IMPORTANCE_LOW;
 
@@ -212,7 +213,7 @@ public class AdvertiserService extends Service {
         } else {
             stopSelf();
         }
-        return name;
+        return id;
     }
 
     /**
